@@ -37,6 +37,27 @@
 				"permissions": "read",
 				"properties": "read",
 				"value": 1
+			},
+			"MANUFACTURER_UUID": {
+				"uuid": "0x2A29",
+				"type": "Uint8Array",
+				"maxBytes": 16,
+				"permissions": "read",
+				"properties": "read"
+			},
+			"VERSION_UUID": {
+				"uuid": "0x2A26",
+				"type": "Uint8Array",
+				"maxBytes": 16,
+				"permissions": "read",
+				"properties": "read"
+			},
+			"MODEL_UUID": {
+				"uuid": "0x2A24",
+				"type": "Uint8Array",
+				"maxBytes": 16,
+				"permissions": "read",
+				"properties": "read"
 			}
 		}
 	}

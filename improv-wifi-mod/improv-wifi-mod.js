@@ -1,10 +1,11 @@
 import BLEServer from "bleserver";
-import GAP from 'gap';
 import { uuid } from "btutils";
+import GAP from 'gap';
 import BLEExports from './consts';
 const StateCodes = BLEExports.StateCodes;
 const ErrorCodes = BLEExports.ErrorCodes;
 const Commands = BLEExports.Commands;
+
 export default class ImprovWifi extends BLEServer {
     deviceName;
     ssid;
@@ -20,6 +21,7 @@ export default class ImprovWifi extends BLEServer {
         this.deviceName = deviceName;
         this.state = StateCodes.STATE_AUTHORIZED;
         this.error = ErrorCodes.ERROR_NONE;
+        this.securityParameters = { mitm:true };
         this.onCredentialsRecieved = onCredentialsRecieved;
     }
     startImprov() {
@@ -27,10 +29,28 @@ export default class ImprovWifi extends BLEServer {
         let advertisingData = {
             flags: GAP.ADFlag.LE_GENERAL_DISCOVERABLE_MODE,
             completeUUID128List: [uuid `00467768-6228-2272-4663-277478268000`],
+            solicitationUUID128List: [uuid `00467768-6228-2272-4663-277478268000`],
+            serviceDataUUID128: uuid `00467768-6228-2272-4663-277478268000`,
+            connectionInterval: [0x20, 0x30],
             completeName: this.deviceName,
             shortName: this.deviceName,
+            appearance: 0x00,
+            uri: "https://junipertechnology.co",
+            publicAddress: "00:11:22:33:AA:BB",
+            txPowerLevel: 0x00,
+            randomAddress: "00:11:22:33:AA:BB",
+            manufacturerSpecific: {
+                identifier: 0xFFFF,
+                data: [0x77, 0x68, 0x62, 0x28, 0x22, 0x72, 0x46, 0x63, 0x27, 0x74, 0x78, 0x26, 0x80, 0x00]
+            }
         };
-        this.startAdvertising({ advertisingData });
+
+        this.startAdvertising(
+            {
+                advertisingData,
+                scanResponseData: advertisingData
+            }
+        );
     }
     onDisconnected() {
         trace("Disconnected\n");
